@@ -198,22 +198,6 @@ def app():
             # Mostrar un mensaje de confirmación
             st.success('Receta médica generada exitosamente!')
 
-            # Función para abrir el PDF en una ventana emergente
-            def abrir_pdf_emergente():
-                with open("receta_medica.pdf", "rb") as file:
-                    pdf_data = file.read()
-                    b64_pdf = base64.b64encode(pdf_data).decode()
-
-                    # Crear un enlace que abra el PDF en una ventana emergente
-                    href = f'''
-                    <a href="data:application/pdf;base64,{b64_pdf}" target="_blank" onclick="window.open('', '_blank', 'width=800,height=600');">
-                        <div style="background-color: #0073e6; color: white; padding: 0.5rem 1rem; border-radius: 0.25rem; display: inline-block; font-size: 1rem; cursor: pointer;">
-                            Abrir PDF para imprimir
-                        </div>
-                    </a>
-                    '''
-                    st.markdown(href, unsafe_allow_html=True)
-
             # Botón para descargar el PDF
             with open("receta_medica.pdf", "rb") as file:
                 st.download_button(
@@ -222,9 +206,6 @@ def app():
                     file_name="receta_medica.pdf",
                     mime="application/pdf"
                 )
-
-            # Botón para abrir el PDF en una ventana emergente
-            abrir_pdf_emergente()
 
 # Ejecutar la aplicación de Streamlit
 if __name__ == "__main__":
