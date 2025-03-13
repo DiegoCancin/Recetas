@@ -1,9 +1,10 @@
+import base64
+
 import streamlit as st
 from reportlab.lib.colors import gray
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
-from PIL import Image
 from datetime import datetime
 
 # Función para agregar la imagen como marca de agua
@@ -12,7 +13,25 @@ def agregar_marca_agua_imagen(c):
     c.saveState()
     c.setFillColor(gray, alpha=0.1)
     # Colocar la imagen de la marca de agua más pequeña y arriba
-    c.drawImage('marca_agua.png', 208, 450, width=200, height=200, mask='auto')
+    c.drawImage('marca_agua.png', 208, 460, width=200, height=200, mask='auto')
+
+# Función para manejar texto largo
+def draw_wrapped_text(c, text, x, y, max_width, font_size):
+    c.setFont("Helvetica", font_size)
+    lines = []
+    words = text.split()
+    current_line = words[0]
+    for word in words[1:]:
+        test_line = current_line + " " + word
+        if c.stringWidth(test_line, "Helvetica", font_size) < max_width:
+            current_line = test_line
+        else:
+            lines.append(current_line)
+            current_line = word
+    lines.append(current_line)
+    for line in lines:
+        c.drawString(x, y, line)
+        y -= font_size + 2  # Ajustar el espacio entre líneas
 
 # Función para generar el PDF
 def generar_receta(datos):
@@ -22,57 +41,58 @@ def generar_receta(datos):
     c.setFont("Helvetica", 12)
 
     # Logo de la institución educativa (ruta fija)
-    c.drawImage('logo_institucion.png', 50, 685, width=80, height=65)  # Ruta fija del logo
+    c.drawImage('logo_institucion.png', 50, 695, width=80, height=60)  # Ruta fija del logo
 
     # Datos del doctor (fijos)
     c.setFont("Helvetica-Bold", 11)
-    c.drawString(200, 730, f"DR. CAMILO CANCÍN VICTORIANO")
-    c.drawString(250, 715, f"MÉDICO CIRUJANO")
-    c.drawString(245, 700, f"CÉD. PROF. 2047688")
-    c.drawString(280, 685, f"UAEM")
+    c.drawString(200, 740, f"DR. CAMILO CANCÍN VICTORIANO")
+    c.drawString(250, 725, f"MÉDICO CIRUJANO")
+    c.drawString(245, 710, f"CÉD. PROF. 2047688")
+    c.drawString(280, 695, f"UAEM")
 
     # Línea debajo de los datos del doctor
-    c.line(30, 680, 580, 680)
+    c.line(30, 690, 580, 690)
 
     c.setFont("Helvetica", 12)
     # Datos del paciente y fecha
-    c.drawString(30, 660, f"Nombre del paciente: {datos['paciente']['nombre']}")
+    c.drawString(30, 670, f"Nombre del paciente: {datos['paciente']['nombre']}")
     fecha_actual = datetime.now().strftime("%d/%m/%Y")
-    c.drawString(480, 660, f"Fecha: {fecha_actual}")
+    c.drawString(480, 670, f"Fecha: {fecha_actual}")
 
     # "RP-" y signos vitales
-    c.drawString(300, 630, "RP-")
+    c.drawString(300, 640, "RP-")
 
     # Información de los signos vitales
-    c.drawString(30, 620, f"Edad: {datos['signos_vitales']['edad']} años")
-    c.drawString(30, 600, f"T.A.: {datos['signos_vitales']['ta']}")
-    c.drawString(30, 580, f"F.C.: {datos['signos_vitales']['fc']}'")
-    c.drawString(30, 560, f"F.R.: {datos['signos_vitales']['fr']}'")
-    c.drawString(30, 540, f"TEMP.: {datos['signos_vitales']['temp']} °C")
-    c.drawString(30, 520, f"PESO: {datos['signos_vitales']['peso']} Kgs")
-    c.drawString(30, 500, f"TALLA: {datos['signos_vitales']['talla']} m.")
-    c.drawString(30, 480, f"I.M.C.: {datos['signos_vitales']['imc']}")
+    c.drawString(30, 630, f"Edad: {datos['signos_vitales']['edad']} años")
+    c.drawString(30, 610, f"T.A.: {datos['signos_vitales']['ta']}")
+    c.drawString(30, 590, f"F.C.: {datos['signos_vitales']['fc']}'")
+    c.drawString(30, 570, f"F.R.: {datos['signos_vitales']['fr']}'")
+    c.drawString(30, 550, f"TEMP.: {datos['signos_vitales']['temp']} °C")
+    c.drawString(30, 530, f"PESO: {datos['signos_vitales']['peso']} Kgs")
+    c.drawString(30, 510, f"TALLA: {datos['signos_vitales']['talla']} m.")
+    c.drawString(30, 490, f"I.M.C.: {datos['signos_vitales']['imc']}")
 
     # Alergias e ID
-    c.drawString(30, 460, f"Alergias: {datos['alergias']}")
-    c.drawString(30, 440, f"I.D.: {datos['id']}")
+    c.drawString(30, 470, f"Alergias: {datos['alergias']}")
+    c.drawString(30, 450, f"I.D.: {datos['id']}")
 
     # Medicamentos
-    y_pos = 615
+    y_pos = 625
     c.setFont("Helvetica-Bold", 12)
     c.drawString(150, y_pos, "Medicamentos:")
     y_pos -= 20
     for medicamento in datos['medicamentos']:
         c.setFont("Helvetica", 12)
-        c.drawString(150, y_pos, f"{medicamento['nombre']} ({medicamento['tipo']}) {medicamento['dosis']} - Cada: {medicamento['cada_cuanto']} horas - Días: {medicamento['dias']} días")
-        y_pos -= 20
+        texto_medicamento = f"{medicamento['nombre']} {medicamento['gramos_medicamento']} ({medicamento['tipo']}) {medicamento['dosis']} - Cada: {medicamento['cada_cuanto']} horas - Días: {medicamento['dias']} días"
+        draw_wrapped_text(c, texto_medicamento, 150, y_pos, 400, 12)
+        y_pos -= 40  # Ajustar el espacio entre medicamentos
 
     # Firma del médico
-    c.drawString(400, 420, "Firma: _____________________")
+    c.drawString(400, 430, "Firma: _____________________")
 
     # Domicilio y teléfono debajo de la firma (datos estáticos)
     c.setFont("Helvetica", 8)
-    c.drawString(40, 400,
+    c.drawString(40, 410,
                  f"DOMICILIO: ACEQUIA MZ 9 LT1 EDIF E DPTO 2 U.H. ANDRÉS MOLINA ENRIQUEZ, METEPEC, MÉXICO. 52149            TEL: 722 930 9430")
 
     # Agregar la imagen como marca de agua
@@ -118,8 +138,9 @@ def app():
         # Medicamentos dinámicos
         st.write("Medicamentos:")
         medicamento_nombre = st.text_input('Nombre del medicamento', key="med_nombre")
+        gramos_medicamento = st.text_input('Gramos del medicamento (ej. 500 mg)', key="gram_nombre")
         medicamento_tipo = st.selectbox('Tipo de medicamento', ['Tableta', 'Suspensión', 'Cápsula', 'Inyección', 'Otro'], key="med_tipo")
-        medicamento_dosis = st.text_input('Dosis del medicamento (ej. 500 mg)', max_chars=20, key="med_dosis")  # Cambiado a st.text_input
+        medicamento_dosis = st.text_input('Dosis del medicamento (ej. 2 tabletas o 2 ml)', max_chars=20, key="med_dosis")  # Cambiado a st.text_input
         medicamento_cada_cuanto = st.number_input('Cada cuánto (solo número, en horas)', min_value=0, key="med_cada_cuanto")
         medicamento_dias = st.number_input('Por cuantos días (solo número)', min_value=0, key="med_dias")
 
@@ -127,6 +148,7 @@ def app():
             if medicamento_nombre and medicamento_dosis and medicamento_cada_cuanto and medicamento_dias:
                 st.session_state.medicamentos.append({
                     'nombre': medicamento_nombre,
+                    'gramos_medicamento': gramos_medicamento,
                     'tipo': medicamento_tipo,
                     'dosis': medicamento_dosis,
                     'cada_cuanto': medicamento_cada_cuanto,
@@ -139,14 +161,14 @@ def app():
         for i, medicamento in enumerate(st.session_state.medicamentos):
             col1, col2 = st.columns([4, 1])
             with col1:
-                st.write(f"{medicamento['nombre']} ({medicamento['tipo']}) - {medicamento['dosis']} - Cada: {medicamento['cada_cuanto']} horas - Días: {medicamento['dias']} días")
+                st.write(f"{medicamento['nombre']} {medicamento['gramos_medicamento']} ({medicamento['tipo']}) - {medicamento['dosis']} - Cada: {medicamento['cada_cuanto']} horas - Días: {medicamento['dias']} días")
             with col2:
                 if st.button(f"Eliminar {i}"):
                     del st.session_state.medicamentos[i]
                     st.rerun()  # Usar st.rerun() en lugar de st.experimental_rerun()
 
     # Botón para generar el PDF
-    if st.button("Generar PDF"):
+    if st.button("Generar receta"):
         if not st.session_state.medicamentos:
             st.error("Debes agregar al menos un medicamento para generar la receta.")
         else:
@@ -176,7 +198,23 @@ def app():
             # Mostrar un mensaje de confirmación
             st.success('Receta médica generada exitosamente!')
 
-            # Mostrar el enlace para descargar el PDF
+            # Función para abrir el PDF en una ventana emergente
+            def abrir_pdf_emergente():
+                with open("receta_medica.pdf", "rb") as file:
+                    pdf_data = file.read()
+                    b64_pdf = base64.b64encode(pdf_data).decode()
+
+                    # Crear un enlace que abra el PDF en una ventana emergente
+                    href = f'''
+                    <a href="data:application/pdf;base64,{b64_pdf}" target="_blank" onclick="window.open('', '_blank', 'width=800,height=600');">
+                        <div style="background-color: #0073e6; color: white; padding: 0.5rem 1rem; border-radius: 0.25rem; display: inline-block; font-size: 1rem; cursor: pointer;">
+                            Abrir PDF para imprimir
+                        </div>
+                    </a>
+                    '''
+                    st.markdown(href, unsafe_allow_html=True)
+
+            # Botón para descargar el PDF
             with open("receta_medica.pdf", "rb") as file:
                 st.download_button(
                     label="Descargar PDF",
@@ -184,6 +222,9 @@ def app():
                     file_name="receta_medica.pdf",
                     mime="application/pdf"
                 )
+
+            # Botón para abrir el PDF en una ventana emergente
+            abrir_pdf_emergente()
 
 # Ejecutar la aplicación de Streamlit
 if __name__ == "__main__":
