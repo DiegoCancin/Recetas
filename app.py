@@ -1,6 +1,5 @@
-import base64
-
 import streamlit as st
+import  pytz
 from reportlab.lib.colors import gray
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.utils import ImageReader
@@ -56,7 +55,9 @@ def generar_receta(datos):
     c.setFont("Helvetica", 12)
     # Datos del paciente y fecha
     c.drawString(30, 670, f"Nombre del paciente: {datos['paciente']['nombre']}")
-    fecha_actual = datetime.now().strftime("%d/%m/%Y")
+    # Definir la zona horaria de México
+    zona_horaria_mexico = pytz.timezone('America/Mexico_City')
+    fecha_actual = datetime.now(zona_horaria_mexico).strftime("%d/%m/%Y")
     c.drawString(480, 670, f"Fecha: {fecha_actual}")
 
     # "RP-" y signos vitales
