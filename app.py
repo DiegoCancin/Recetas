@@ -78,7 +78,7 @@ def generar_receta(datos):
 
     # Medicamentos
     y_pos = 625
-    c.setFont("Helvetica-Bold", 12)
+    c.setFont("Helvetica-Bold", 14)
     c.drawString(150, y_pos, "Medicamentos:")
     y_pos -= 20
     for medicamento in datos['medicamentos']:
