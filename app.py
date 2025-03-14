@@ -84,7 +84,7 @@ def generar_receta(datos):
     y_pos -= 20
     for medicamento in datos['medicamentos']:
         c.setFont("Helvetica", 12)
-        texto_medicamento = f"{medicamento['nombre']} {medicamento['gramos_medicamento']} ({medicamento['tipo']}) {medicamento['dosis']} - Cada: {medicamento['cada_cuanto']} horas - Días: {medicamento['dias']} días"
+        texto_medicamento = f"{medicamento['nombre']} {medicamento['gramos_medicamento']} {medicamento['tipo']} {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días"
         draw_wrapped_text(c, texto_medicamento, 150, y_pos, 400, 12)
         y_pos -= 40  # Ajustar el espacio entre medicamentos
 
@@ -140,7 +140,7 @@ def app():
         st.write("Agregar medicamento:")
         medicamento_nombre = st.text_input('Nombre del medicamento', key="med_nombre")
         gramos_medicamento = st.text_input('Gramos del medicamento (ej. 500 mg)', key="gram_nombre")
-        medicamento_tipo = st.selectbox('Tipo de medicamento', ['Tableta', 'Suspensión', 'Cápsula', 'Inyección', 'Otro'], key="med_tipo")
+        medicamento_tipo = st.selectbox('Tipo de medicamento', ['Tableta', 'Suspensión', 'Cápsula', 'Inyección', 'Vía oral', 'Otro'], key="med_tipo")
         medicamento_dosis = st.text_input('Dosis del medicamento (ej. 2 tabletas o 2 ml)', max_chars=20, key="med_dosis")
         medicamento_cada_cuanto = st.number_input('Cada cuánto (solo número, en horas)', min_value=0, key="med_cada_cuanto")
         medicamento_dias = st.number_input('Por cuantos días (solo número)', min_value=0, key="med_dias")
