@@ -113,35 +113,35 @@ def app():
 
     st.write("Completa los campos a continuación para generar la receta médica:")
 
-    # Inicializar session_state para los medicamentos
+    # Inicializar session_state para los medicamentos y datos de la receta
     if 'medicamentos' not in st.session_state:
         st.session_state.medicamentos = []
 
-    # Campos de entrada organizados en un formulario
-    with st.form(key='receta_form'):
-        col1, col2 = st.columns([1, 1])
+    # Campos de entrada para los datos principales de la receta (sin formulario)
+    col1, col2 = st.columns([1, 1])
 
-        with col1:
-            nombre_paciente = st.text_input('Nombre del paciente', max_chars=50)
-            edad = st.text_input('Edad', max_chars=3)
-            ta = st.text_input('T.A. (ej. 120/80)', max_chars=7)
-            fc = st.text_input('F.C.', max_chars=5)
-            fr = st.text_input('F.R.', max_chars=5)
-            temp = st.text_input('Temperatura', max_chars=5)
+    with col1:
+        nombre_paciente = st.text_input('Nombre del paciente', max_chars=50)
+        edad = st.text_input('Edad', max_chars=3)
+        ta = st.text_input('T.A. (ej. 120/80)', max_chars=7)
+        fc = st.text_input('F.C.', max_chars=5)
+        fr = st.text_input('F.R.', max_chars=5)
+        temp = st.text_input('Temperatura', max_chars=5)
 
-        with col2:
-            peso = st.text_input('Peso (kg)', max_chars=5)
-            talla = st.text_input('Talla (m)', max_chars=5)
-            imc = st.text_input('I.M.C.', max_chars=5)
-            alergias = st.text_input('Alergias', max_chars=100)
-            id_paciente = st.text_input('I.D. del paciente', max_chars=100)
+    with col2:
+        peso = st.text_input('Peso (kg)', max_chars=5)
+        talla = st.text_input('Talla (m)', max_chars=5)
+        imc = st.text_input('I.M.C.', max_chars=5)
+        alergias = st.text_input('Alergias', max_chars=100)
+        id_paciente = st.text_input('I.D. del paciente', max_chars=100)
 
-        # Medicamentos dinámicos
-        st.write("Medicamentos:")
+    # Formulario independiente para agregar medicamentos
+    with st.form(key='medicamento_form', clear_on_submit=True):  # clear_on_submit solo limpia este formulario
+        st.write("Agregar medicamento:")
         medicamento_nombre = st.text_input('Nombre del medicamento', key="med_nombre")
         gramos_medicamento = st.text_input('Gramos del medicamento (ej. 500 mg)', key="gram_nombre")
         medicamento_tipo = st.selectbox('Tipo de medicamento', ['Tableta', 'Suspensión', 'Cápsula', 'Inyección', 'Otro'], key="med_tipo")
-        medicamento_dosis = st.text_input('Dosis del medicamento (ej. 2 tabletas o 2 ml)', max_chars=20, key="med_dosis")  # Cambiado a st.text_input
+        medicamento_dosis = st.text_input('Dosis del medicamento (ej. 2 tabletas o 2 ml)', max_chars=20, key="med_dosis")
         medicamento_cada_cuanto = st.number_input('Cada cuánto (solo número, en horas)', min_value=0, key="med_cada_cuanto")
         medicamento_dias = st.number_input('Por cuantos días (solo número)', min_value=0, key="med_dias")
 
@@ -156,7 +156,7 @@ def app():
                     'dias': medicamento_dias
                 })
 
-    # Mostrar los medicamentos agregados con botón de eliminar (fuera del formulario)
+    # Mostrar los medicamentos agregados con botón de eliminar
     if st.session_state.medicamentos:
         st.write("Medicamentos agregados:")
         for i, medicamento in enumerate(st.session_state.medicamentos):
@@ -166,7 +166,7 @@ def app():
             with col2:
                 if st.button(f"Eliminar {i}"):
                     del st.session_state.medicamentos[i]
-                    st.rerun()  # Usar st.rerun() en lugar de st.experimental_rerun()
+                    st.rerun()
 
     # Botón para generar el PDF
     if st.button("Generar receta"):
@@ -199,14 +199,21 @@ def app():
             # Mostrar un mensaje de confirmación
             st.success('Receta médica generada exitosamente!')
 
-            # Botón para descargar el PDF
-            with open("receta_medica.pdf", "rb") as file:
-                st.download_button(
-                    label="Descargar PDF",
-                    data=file,
-                    file_name="receta_medica.pdf",
-                    mime="application/pdf"
-                )
+            # Guardar los datos en session_state para usarlos en la descarga
+            st.session_state.datos_receta_generada = datos_receta
+
+    # Botón para descargar el PDF (solo se muestra si la receta ha sido generada)
+    if 'datos_receta_generada' in st.session_state:
+        with open("receta_medica.pdf", "rb") as file:
+            if st.download_button(
+                label="Descargar PDF",
+                data=file,
+                file_name="receta_medica.pdf",
+                mime="application/pdf"
+            ):
+                st.session_state.medicamentos = []
+                del st.session_state.datos_receta_generada  # Eliminar los datos generados
+                st.rerun()  # Recargar la página para reflejar los cambios
 
 # Ejecutar la aplicación de Streamlit
 if __name__ == "__main__":
