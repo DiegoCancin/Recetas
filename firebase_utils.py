@@ -1,9 +1,19 @@
-# firebase_utils.py
+import os
+import json
 import firebase_admin
 from firebase_admin import credentials, firestore
 
+# Cargar las credenciales desde una variable de entorno
+firebase_credentials = os.getenv("FIREBASE_CREDENTIALS")
+
+if not firebase_credentials:
+    raise ValueError("La variable de entorno FIREBASE_CREDENTIALS no está configurada.")
+
+# Convertir la cadena JSON en un diccionario
+cred_dict = json.loads(firebase_credentials)
+
 # Inicializa la app de Firebase (solo una vez)
-cred = credentials.Certificate("recetas-cavic-firebase-adminsdk-fbsvc-723990aafd.json")
+cred = credentials.Certificate(cred_dict)
 firebase_admin.initialize_app(cred)
 
 # Función para obtener los medicamentos desde Firestore
