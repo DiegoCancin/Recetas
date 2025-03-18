@@ -67,8 +67,16 @@ def generar_receta(datos):
             ingredientes_texto = ", ".join(
                 [f"{ingrediente['nombre']} {ingrediente['dosis']}" for ingrediente in medicamento['ingredientes']])
 
-            # Construir el texto del medicamento compuesto
-            texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días"
+            # Validar el tipo de medicamento compuesto y construir el texto personalizado
+            if medicamento['tipo'] == 'TABLETA':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
+            elif medicamento['tipo'] == 'SUSPENSIÓN':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} ml cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
+            elif medicamento['tipo'] == 'JARABE':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} ml cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
+            else:
+                # Si es otro tipo de medicamento compuesto, usar un texto genérico
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días"
         else:
             # Si no es un medicamento compuesto, mostrar el gramaje general
             if medicamento['tipo'] == 'INYECTABLE':
