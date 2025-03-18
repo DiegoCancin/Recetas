@@ -74,9 +74,36 @@ def generar_receta(datos):
                 texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} ml cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
             elif medicamento['tipo'] == 'JARABE':
                 texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} ml cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
-            else:
-                # Si es otro tipo de medicamento compuesto, usar un texto genérico
-                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días"
+            elif medicamento['tipo'] == 'INYECTABLE':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días Intramuscular"
+            elif medicamento['tipo'] == 'SUERO':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Polvo/Solución Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días (Tomar a libre demanda)"
+            elif medicamento['tipo'] == 'SUPOSITORIOS':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía rectal"
+            elif medicamento['tipo'] == 'PERLAS':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
+            elif medicamento['tipo'] == 'NASAL':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía nasal"
+            elif medicamento['tipo'] == 'LOCAL CUTÁNEA':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} {medicamento['dosis']} aplicaciones cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días en la zona afectada"
+            elif medicamento['tipo'] == 'VAGINAL':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía vaginal"
+            elif medicamento['tipo'] == 'SUBCUTÁNEA':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía subcutánea"
+            elif medicamento['tipo'] == 'CÁPSULA':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
+            elif medicamento['tipo'] == 'RECTAL':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía rectal"
+            elif medicamento['tipo'] == 'AEROSOL':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} {medicamento['dosis']} inhalaciones cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía inhalación"
+            elif medicamento['tipo'] == 'ÓTICA':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía ótica"
+            elif medicamento['tipo'] == 'OFTÁLMICA':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía oftálmica"
+            elif medicamento['tipo'] == 'INHALACIÓN':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} {medicamento['dosis']} inhalaciones cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía inhalación"
+            elif medicamento['tipo'] == 'INTRAVENOSA':
+                texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía intravenosa"
         else:
             # Si no es un medicamento compuesto, mostrar el gramaje general
             if medicamento['tipo'] == 'INYECTABLE':
