@@ -84,7 +84,7 @@ def generar_receta(datos):
             elif medicamento['tipo'] == 'LOCAL CUTÁNEA':
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} {medicamento['dosis']} aplicaciones cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días en la zona afectada"
             elif medicamento['tipo'] == 'SUSPENSIÓN':
-                texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
+                texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Tomar {medicamento['dosis']} ml cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
             elif medicamento['tipo'] == 'VAGINAL':
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía vaginal"
             elif medicamento['tipo'] == 'SUBCUTÁNEA':
@@ -105,6 +105,8 @@ def generar_receta(datos):
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} {medicamento['dosis']} inhalaciones cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía inhalación"
             elif medicamento['tipo'] == 'INTRAVENOSA':
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía intravenosa"
+            elif medicamento['tipo'] == 'JARABE':
+                texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Tomar {medicamento['dosis']} ml cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
             else:
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
 
