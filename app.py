@@ -83,7 +83,7 @@ def app():
         if st.form_submit_button('Agregar medicamento'):
             if medicamento_info and medicamento_dosis and medicamento_cada_cuanto and medicamento_dias:
                 st.session_state.medicamentos.append({
-                    'nombre': medicamento_info['nombre'],
+                    'nombre': medicamento_info['nombre'].upper(),
                     'gramos_medicamento': f"{medicamento_info['gramaje']} {medicamento_info['unidad']}",
                     'tipo': forma['nombre'].upper(),
                     'dosis': medicamento_dosis,
