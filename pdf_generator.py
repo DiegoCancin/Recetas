@@ -65,10 +65,10 @@ def generar_receta(datos):
         if 'ingredientes' in medicamento and medicamento['ingredientes']:
             # Si es un medicamento compuesto, listar los ingredientes en una sola línea
             ingredientes_texto = ", ".join(
-                [f"{ingrediente['nombre']} {ingrediente['dosis']}" for ingrediente in medicamento['ingredientes']])
+                [f"{ingrediente['nombre'].upper()} {ingrediente['dosis']}" for ingrediente in medicamento['ingredientes']])
 
             # Validar el tipo de medicamento compuesto y construir el texto personalizado
-            if medicamento['tipo'] == 'TABLETA':
+            if medicamento['tipo'] == 'TABLETAS':
                 texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
             elif medicamento['tipo'] == 'SUSPENSIÓN':
                 texto_medicamento = f"{ingredientes_texto} {medicamento['tipo']} Tomar {medicamento['dosis']} ml cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
@@ -126,7 +126,7 @@ def generar_receta(datos):
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía subcutánea"
             elif medicamento['tipo'] == 'CÁPSULA':
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
-            elif medicamento['tipo'] == 'TABLETA':
+            elif medicamento['tipo'] == 'TABLETAS':
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Tomar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas vía oral por {medicamento['dias']} días"
             elif medicamento['tipo'] == 'RECTAL':
                 texto_medicamento = f"{nombre_medicamento} {medicamento['gramos_medicamento']} {medicamento['tipo']} Aplicar {medicamento['dosis']} cada {medicamento['cada_cuanto']} horas por {medicamento['dias']} días vía rectal"
