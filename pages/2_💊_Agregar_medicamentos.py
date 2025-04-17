@@ -20,7 +20,7 @@ def add_medication():
     es_compuesto = st.checkbox("¿Es un medicamento compuesto?")
 
     # Campos comunes para todos los medicamentos
-    unidad = st.selectbox("Unidad", ["g", "mg", "%", "ml", "UI"])  # Lista desplegable para seleccionar la unidad
+    unidad = st.selectbox("Unidad", ["g", "mg", "mg/mL", "%", "ml", "UI"])  # Lista desplegable para seleccionar la unidad
 
     # Obtener la lista de formas farmacéuticas desde Firestore
     try:
