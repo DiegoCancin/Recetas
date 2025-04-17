@@ -46,20 +46,18 @@ import os
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-# Ruta al archivo JSON con las credenciales de Firebase
-FIREBASE_CREDENTIALS_PATH =os.getenv("FIREBASE_CREDENTIALS")
-  # Cambia esto si el archivo está en otra ubicación
+# Cargar las credenciales desde una variable de entorno
+firebase_credentials = os.getenv("FIREBASE_CREDENTIALS")
 
-# Verificar si el archivo de credenciales existe
-if not os.path.exists(FIREBASE_CREDENTIALS_PATH):
-    raise FileNotFoundError(f"No se encontró el archivo de credenciales en: {FIREBASE_CREDENTIALS_PATH}")
+if not firebase_credentials:
+    raise ValueError("La variable de entorno FIREBASE_CREDENTIALS no está configurada.")
 
-# Cargar las credenciales desde el archivo JSON
-cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
+# Convertir la cadena JSON en un diccionario
+cred_dict = json.loads(firebase_credentials)
 
 # Inicializa la app de Firebase (solo una vez)
-if not firebase_admin._apps:  # Verificar si Firebase ya está inicializado
-    firebase_admin.initialize_app(cred)
+cred = credentials.Certificate(cred_dict)
+firebase_admin.initialize_app(cred)
 
 # Obtener la instancia de Firestore
 def obtener_firestore():
